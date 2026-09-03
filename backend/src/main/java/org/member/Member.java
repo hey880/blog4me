@@ -31,4 +31,8 @@ public class Member {
     public void setEmail(String email) {
         this.email = email;
     }
+
+    public void printMember() {
+        System.out.println("Member [id: "+ id + ", name: " + name + ", email: " + email + "]");
+    }
 }

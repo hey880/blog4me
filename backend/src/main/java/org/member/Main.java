@@ -6,10 +6,8 @@ public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         List<Member> members = addMember(scanner);
-        for(int i=0; i < members.size(); i++) {
-            System.out.println(members.get(i).getId());
-            System.out.println(members.get(i).getName());
-            System.out.println(members.get(i).getEmail());
+        for (Member member : members) {
+            member.printMember();
         }
     }
     public static Member createMember(Scanner scanner) {
