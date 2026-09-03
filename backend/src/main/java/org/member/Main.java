@@ -4,26 +4,36 @@ import java.util.*;
 
 public class Main {
     public static void main(String[] args) {
-        List<Member> members = addMember();
+        Scanner scanner = new Scanner(System.in);
+        List<Member> members = addMember(scanner);
         for(int i=0; i < members.size(); i++) {
             System.out.println(members.get(i).getId());
             System.out.println(members.get(i).getName());
             System.out.println(members.get(i).getEmail());
         }
     }
+    public static Member createMember(Scanner scanner) {
+        System.out.println("Please input id");
+        String id = scanner.next();
+        System.out.println("Please input name");
+        String name = scanner.next();
+        System.out.println("Please input email");
+        String email = scanner.next();
 
-    public static List<Member> addMember() {
+        Member member = new Member(id, name, email);
+        return member;
+    }
+
+    public static List<Member> addMember(Scanner scanner) {
         Integer memberCount;
 
         List<Member> members = new ArrayList<Member>();
-
-        Scanner scanner = new Scanner(System.in);
 
         System.out.print("등록하실 인원을 입력하세요.");
         memberCount = scanner.nextInt();
 
         for (int i=1; i <= memberCount; i++) {
-            Member member = new Member(scanner.next(),scanner.next(),scanner.next());
+            Member member = createMember(scanner);
             members.add(member);
         }
 
