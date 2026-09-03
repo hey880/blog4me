@@ -1,11 +1,14 @@
 package org.member;
 
-public class Member {
+import java.util.List;
+import java.util.Scanner;
+
+public class MemberDto {
     private String id;
     private String name;
     private String email;
 
-    public Member(String id, String name, String email) {
+    public MemberDto(String id, String name, String email) {
         this.id = id;
         this.name = name;
         this.email = email;
@@ -33,6 +36,6 @@ public class Member {
     }
 
     public void printMember() {
-        System.out.println("Member [id: "+ id + ", name: " + name + ", email: " + email + "]");
+        System.out.println("[Member Info - "+"id: "+id+", name: "+name+", email : "+email+"]");
     }
 }

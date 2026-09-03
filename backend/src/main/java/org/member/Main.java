@@ -2,39 +2,37 @@ package org.member;
 
 import java.util.*;
 
+import org.member.MemberService;
+
 public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        List<Member> members = addMember(scanner);
-        for (Member member : members) {
-            member.printMember();
+        System.out.println("Please input member count");
+        int memberCount = scanner.nextInt();
+        MemberService memberService = new MemberService();
+        int i = 0;
+        while (i < memberCount) {
+            System.out.println("Please input id");
+            String id = scanner.next();
+            System.out.println("Please input name");
+            String name = scanner.next();
+            System.out.println("Please input email");
+            String email = scanner.next();
+            MemberDto member = new MemberDto(id, name, email);
+            // member 추가
+            memberService.addMember(member);
+            i++;
         }
-    }
-    public static Member createMember(Scanner scanner) {
-        System.out.println("Please input id");
-        String id = scanner.next();
-        System.out.println("Please input name");
-        String name = scanner.next();
-        System.out.println("Please input email");
-        String email = scanner.next();
-
-        Member member = new Member(id, name, email);
-        return member;
-    }
-
-    public static List<Member> addMember(Scanner scanner) {
-        Integer memberCount;
-
-        List<Member> members = new ArrayList<Member>();
-
-        System.out.print("등록하실 인원을 입력하세요.");
-        memberCount = scanner.nextInt();
-
-        for (int i=1; i <= memberCount; i++) {
-            Member member = createMember(scanner);
-            members.add(member);
+        // 전체 조회
+        List<MemberDto> allMember = memberService.getAllMember();
+        // id 검색 조회
+        System.out.println("Please input id what you want to search.");
+        String searchId = scanner.next();
+        Optional<MemberDto> result = memberService.getMemberById(searchId);
+        if (result.isPresent()) {
+            result.get().printMember();
+        } else {
+            System.out.println("'"+searchId+"'"+" is not exist.");
         }
-
-        return members;
     }
 }
