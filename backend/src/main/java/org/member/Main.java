@@ -4,19 +4,18 @@ import java.util.*;
 
 public class Main {
     public static void main(String[] args) {
-        List<Map<String, String>> members = addMember();
+        List<Member> members = addMember();
         for(int i=0; i < members.size(); i++) {
-            System.out.println(members.get(i));
+            System.out.println(members.get(i).getId());
+            System.out.println(members.get(i).getName());
+            System.out.println(members.get(i).getEmail());
         }
     }
 
-    public static List<Map<String, String>> addMember() {
-        String id;
-        String name;
-        String email;
+    public static List<Member> addMember() {
         Integer memberCount;
 
-        List<Map<String, String>> members = new ArrayList<Map<String, String>>();
+        List<Member> members = new ArrayList<Member>();
 
         Scanner scanner = new Scanner(System.in);
 
@@ -24,16 +23,7 @@ public class Main {
         memberCount = scanner.nextInt();
 
         for (int i=1; i <= memberCount; i++) {
-            Map member = new HashMap();
-            System.out.print("id를 입력하세요.");
-            id = scanner.next();
-            member.put("id", id);
-            System.out.print("name을 입력하세요.");
-            name = scanner.next();
-            member.put("name", name);
-            System.out.print("email을 입력하세요.");
-            email = scanner.next();
-            member.put("email", email);
+            Member member = new Member(scanner.next(),scanner.next(),scanner.next());
             members.add(member);
         }
 
