@@ -11,7 +11,7 @@ public class Main {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Please input member count");
         int memberCount = scanner.nextInt();
-        MemberService memberService = new MemberService();
+        MemberService memberService = new MemberServiceImpl();
         int i = 0;
         while (i < memberCount) {
             System.out.println("Please input id");
