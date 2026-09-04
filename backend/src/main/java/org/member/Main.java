@@ -25,14 +25,43 @@ public class Main {
         }
         // 전체 조회
         List<MemberDto> allMember = memberService.getAllMember();
+        System.out.println("===all member list===");
+        for (MemberDto member : allMember) {
+            member.printMember();
+        }
         // id 검색 조회
         System.out.println("Please input id what you want to search.");
         String searchId = scanner.next();
-        Optional<MemberDto> result = memberService.getMemberById(searchId);
-        if (result.isPresent()) {
-            result.get().printMember();
+        search(memberService, searchId);
+        // 수정
+        System.out.println("Please input id what you want to edit.");
+        String memberEditId = scanner.next();
+        Optional<MemberDto> getMember = search(memberService, memberEditId);
+        Optional<MemberDto> prevMemberInfo = getMember.map(MemberDto::new);
+        if (getMember.isPresent()) {
+            System.out.println("Please input 'name' what you want to edit.");
+            String name = scanner.next();
+            System.out.println("Please input 'email' what you want to edit.");
+            String email = scanner.next();
+            boolean editSuccess = memberService.updateMember(memberEditId, name, email);
+            if (editSuccess) {
+                System.out.println("===Previous Member Info===");
+                prevMemberInfo.get().printMember();
+                System.out.println("===Edit result===");
+                getMember.get().printMember();
+            }
+        }
+        // 삭제
+        System.out.println("Please input id what you want to delete.");
+    }
+    public static Optional<MemberDto> search(MemberService memberService, String id) {
+        Optional<MemberDto> searchResult = memberService.getMemberById(id);
+        if (searchResult.isPresent()) {
+            searchResult.get().printMember();
+            return searchResult;
         } else {
-            System.out.println("'"+searchId+"'"+" is not exist.");
+            System.out.println("'"+id+"'"+" is not exist.");
+            return Optional.empty();
         }
     }
 }

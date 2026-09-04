@@ -18,4 +18,17 @@ public class MemberService {
         }
         return Optional.empty();
     }
+    public boolean updateMember(String id, String name, String email) {
+        Optional<MemberDto> member = getMemberById(id);
+        if (member.isPresent()) {
+            member.get().setName(name);
+            member.get().setEmail(email);
+            return true;
+        } else {
+            return false;
+        }
+    }
+    public void deleteMember(String id) {
+
+    }
 }
