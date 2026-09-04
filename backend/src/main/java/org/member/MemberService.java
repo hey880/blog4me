@@ -1,5 +1,6 @@
 package org.member;
 
+import javax.swing.text.html.Option;
 import java.util.*;
 
 public class MemberService {
@@ -28,7 +29,8 @@ public class MemberService {
             return false;
         }
     }
-    public void deleteMember(String id) {
-
+    public boolean deleteMember(String id) {
+        // removeIf는 boolean 값을 반환한다.
+        return members.removeIf(member -> member.getId().equals(id));
     }
 }

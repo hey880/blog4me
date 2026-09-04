@@ -53,6 +53,17 @@ public class Main {
         }
         // 삭제
         System.out.println("Please input id what you want to delete.");
+        String deleteId = scanner.next();
+        boolean deleteSuccess = memberService.deleteMember(deleteId);
+        if (deleteSuccess) {
+            System.out.println("ID: "+"'"+deleteId+"'"+" Delete success");
+            System.out.println("===All member list===");
+            for (MemberDto member : allMember) {
+                member.printMember();
+            }
+        } else {
+            System.out.println("ID: "+"'"+deleteId+"'"+" Delete failed");
+        }
     }
     public static Optional<MemberDto> search(MemberService memberService, String id) {
         Optional<MemberDto> searchResult = memberService.getMemberById(id);
