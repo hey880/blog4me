@@ -1,9 +1,6 @@
 package org.member;
 
-import javax.swing.text.html.Option;
 import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class MemberService {
     List<MemberDto> members = new ArrayList<MemberDto>();
@@ -22,6 +19,13 @@ public class MemberService {
             }
         }
         return Optional.empty();
+    }
+    public MemberDto getMemberByIdOrThrow(String id) {
+        Optional<MemberDto> member = getMemberById(id);
+        return member.orElseThrow(() -> new RuntimeException("Not exist id: " + id));
+        // 관례상 unchecked exception은 메서드 뒤에 throws~ 안 붙임
+        // RuntimeException도 unchecked exception에 해당하기 때문에 이렇게 선언만 하고
+        // 메서드 뒤에 throws를 붙이지는 않는다.
     }
     public boolean updateMember(String id, String name, String email) {
         Optional<MemberDto> member = getMemberById(id);

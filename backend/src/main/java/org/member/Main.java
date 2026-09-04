@@ -35,6 +35,16 @@ public class Main {
         System.out.println("Please input id what you want to search.");
         String searchId = scanner.next();
         search(memberService, searchId);
+
+        // throw try-catch
+        try {
+            MemberDto member = memberService.getMemberByIdOrThrow(searchId);
+            System.out.println("===try catch value result===");
+            member.printMember();
+        } catch (RuntimeException e) {
+            System.out.println(e.getMessage());
+        }
+
         // 수정
         System.out.println("Please input id what you want to edit.");
         String memberEditId = scanner.next();
