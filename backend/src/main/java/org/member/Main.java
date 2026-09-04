@@ -4,6 +4,8 @@ import java.util.*;
 
 import org.member.MemberService;
 
+import javax.swing.text.html.Option;
+
 public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
@@ -63,6 +65,17 @@ public class Main {
             }
         } else {
             System.out.println("ID: "+"'"+deleteId+"'"+" Delete failed");
+        }
+        // 이름을 통한 조회
+        System.out.println("Please input name what you want to find.");
+        String name = scanner.next();
+        List<MemberDto> memberList = memberService.findByName(name);
+        if (memberList.isEmpty()) {
+            System.out.println("name: "+name+" member is not exist.");
+        } else {
+            for (MemberDto member : memberList) {
+                member.printMember();
+            }
         }
     }
     public static Optional<MemberDto> search(MemberService memberService, String id) {
