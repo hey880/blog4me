@@ -2,6 +2,7 @@ package com.user.mgmt.service;
 
 import com.user.mgmt.dto.MemberDto;
 import com.user.mgmt.repository.MemberRepository;
+import com.user.mgmt.utils.MemberNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -27,7 +28,7 @@ public class MemberServiceImpl implements MemberService{
     }
     public MemberDto getMemberByIdOrThrow(String id) {
         Optional<MemberDto> member = getMemberById(id);
-        return member.orElseThrow(() -> new RuntimeException("Not exist id: " + id));
+        return member.orElseThrow(() -> new MemberNotFoundException(id));
         // 관례상 unchecked exception은 메서드 뒤에 throws~ 안 붙임
         // RuntimeException도 unchecked exception에 해당하기 때문에 이렇게 선언만 하고
         // 메서드 뒤에 throws를 붙이지는 않는다.
