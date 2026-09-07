@@ -26,15 +26,34 @@ public class MemberController {
     }
 
     @GetMapping("/members/{id}")
-    public String getMemeberById(@PathVariable String id) {
-        return "요청받은 id: " + id;
+    public MemberDto getMemeber(@PathVariable String id) {
+        MemberDto member = memberService.getMemberByIdOrThrow(id);
+        return member;
+    }
+
+    @PutMapping("/members/{id}")
+    public String updateMember(@PathVariable String id, @RequestBody MemberDto member) {
+        boolean result = memberService.updateMember(id, member.getName(), member.getEmail());
+        if (result) {
+            return id;
+        } else {
+            return "수정 실패";
+        }
+    }
+
+    @DeleteMapping("/members/{id}")
+    public String deleteMember(@PathVariable String id) {
+        boolean result = memberService.deleteMember(id);
+        if (result) {
+            return id;
+        } else {
+            return "삭제 실패";
+        }
     }
 
     @GetMapping("/members/search")
-    public String searchByName(@RequestParam(required=false) String name) {
-        if (name == null) {
-            return "검색어가 없습니다.";
-        }
-        return "검색어: " + name;
+    public List<MemberDto> searchMember(@RequestParam String name) {
+        List<MemberDto> result = memberService.findByName(name);
+        return result;
     }
 }
