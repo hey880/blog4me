@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-@Repository
+// @Repository
 public class MemberRepositoryImpl implements MemberRepository{
     private List<MemberDto> members = new ArrayList<MemberDto>();
     public void save(MemberDto member) {members.add(member);}
