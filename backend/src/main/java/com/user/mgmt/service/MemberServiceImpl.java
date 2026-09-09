@@ -1,7 +1,8 @@
 package com.user.mgmt.service;
 
 import com.user.mgmt.dto.MemberDto;
-import com.user.mgmt.repository.MemberRepository;
+import com.user.mgmt.entity.Member;
+import com.user.mgmt.repository.MemberJpaRepository;
 import com.user.mgmt.utils.MemberNotFoundException;
 import org.springframework.stereotype.Service;
 
@@ -10,21 +11,36 @@ import java.util.Optional;
 
 @Service
 public class MemberServiceImpl implements MemberService{
-    final private MemberRepository memberRepository;
+//    final private MemberRepository memberRepository;
+    final private MemberJpaRepository memberJpaRepository;
 
-    public MemberServiceImpl (MemberRepository memberRepository) {
-        this.memberRepository = memberRepository;
+//    public MemberServiceImpl (MemberRepository memberRepository) {
+//        this.memberRepository = memberRepository;
+//    }
+    public MemberServiceImpl (MemberJpaRepository memberJpaRepository) {
+        this.memberJpaRepository = memberJpaRepository;
     }
-    public void addMember(MemberDto member) {
-        memberRepository.save(member);
+    public void addMember(MemberDto memberDto) {
+        // memberRepository.save(member);
+        Member member = new Member(memberDto.getId(), memberDto.getName(), memberDto.getEmail());
+        memberJpaRepository.save(member);
     }
     public List<MemberDto> getAllMember () {
         // members arraylist를 그대로 Main으로 넘겨주면 Main에서 이 값을 마음대로 수정/삭제할 수 있음
         // 따라서 복사된 값을 넘겨주기 위해 ArrayList를 새로 선언하여 반환한다. (캡슐화)
-        return memberRepository.findAll();
+        List<Member> allmember = memberJpaRepository.findAll();
+        List <MemberDto> allMemberDtoList = allmember.stream()
+                .map(entity -> new MemberDto(entity.getId(), entity.getName(), entity.getEmail()))
+                .toList();
+        return allMemberDtoList;
     }
     public Optional<MemberDto> getMemberById (String id) {
-        return memberRepository.findById(id);
+        Optional<Member> member = memberJpaRepository.findById(id);
+        if (member.isPresent()) {
+            MemberDto memberDto = new MemberDto(member.get().getId(), member.get().getName(), member.get().getEmail());
+            return Optional.of(memberDto);
+        }
+        return Optional.empty();
     }
     public MemberDto getMemberByIdOrThrow(String id) {
         Optional<MemberDto> member = getMemberById(id);
@@ -34,22 +50,36 @@ public class MemberServiceImpl implements MemberService{
         // 메서드 뒤에 throws를 붙이지는 않는다.
     }
     public boolean updateMember(String id, String name, String email) {
-        Optional<MemberDto> member = getMemberById(id);
-        if (member.isPresent()) {
-            member.get().setName(name);
-            member.get().setEmail(email);
+        // DB에 저장된 값을 가져와서 변경해야함.
+        Optional<Member> memberOpt = memberJpaRepository.findById(id); // Entity로 직접 조회
+        if (memberOpt.isPresent()) {
+            // 값 업데이트
+            Member member = memberOpt.get();
+            member.setName(name);
+            member.setEmail(email);
+            memberJpaRepository.save(member);  // 명시적으로 다시 저장
             return true;
-        } else {
-            return false;
         }
+        return false;
     }
     public boolean deleteMember(String id) {
         // removeIf는 boolean 값을 반환한다.
-        return memberRepository.delete(id);
+        // return memberRepository.delete(id);
+        if (memberJpaRepository.existsById(id)) {
+            memberJpaRepository.deleteById(id);
+            return true;
+        }
+        return false;
     }
     // Stream을 이용한 구현
     // List는 빈 List로 두지 Optional 타입으로 처리하지 않는다.
+//    public List<MemberDto> findByName(String keyword) {
+//        return memberRepository.findByName(keyword);
+//    }
     public List<MemberDto> findByName(String keyword) {
-        return memberRepository.findByName(keyword);
+        List<Member> members = memberJpaRepository.findByNameContaining(keyword);
+        return members.stream()
+                .map(entity -> new MemberDto(entity.getId(), entity.getName(), entity.getEmail()))
+                .toList();
     }
 }

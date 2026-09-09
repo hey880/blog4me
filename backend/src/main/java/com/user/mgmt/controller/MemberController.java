@@ -1,6 +1,7 @@
 package com.user.mgmt.controller;
 
 import com.user.mgmt.dto.MemberDto;
+import com.user.mgmt.entity.Member;
 import com.user.mgmt.service.MemberService;
 import org.springframework.web.bind.annotation.*;
 
@@ -42,13 +43,8 @@ public class MemberController {
     }
 
     @DeleteMapping("/members/{id}")
-    public String deleteMember(@PathVariable String id) {
-        boolean result = memberService.deleteMember(id);
-        if (result) {
-            return id;
-        } else {
-            return "삭제 실패";
-        }
+    public boolean deleteMember(@PathVariable String id) {
+        return memberService.deleteMember(id);
     }
 
     @GetMapping("/members/search")
