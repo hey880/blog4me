@@ -3,6 +3,7 @@ package com.user.mgmt.controller;
 import com.user.mgmt.dto.MemberDto;
 import com.user.mgmt.entity.Member;
 import com.user.mgmt.service.MemberService;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -51,5 +52,13 @@ public class MemberController {
     public List<MemberDto> searchMember(@RequestParam String name) {
         List<MemberDto> result = memberService.findByName(name);
         return result;
+    }
+
+    @GetMapping("/members/page")
+    public Page<MemberDto> getMemberPage(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+    ) {
+        return memberService.getMemberPage(page, size);
     }
 }

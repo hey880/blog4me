@@ -4,6 +4,9 @@ import com.user.mgmt.dto.MemberDto;
 import com.user.mgmt.entity.Member;
 import com.user.mgmt.repository.MemberJpaRepository;
 import com.user.mgmt.utils.MemberNotFoundException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -81,5 +84,13 @@ public class MemberServiceImpl implements MemberService{
         return members.stream()
                 .map(entity -> new MemberDto(entity.getId(), entity.getName(), entity.getEmail()))
                 .toList();
+    }
+
+    // 페이징
+    // Page에도 .map()이 있어서 List 처럼 Stream 안 거치고 바로 Entity -> DTO로 변환이 가능
+    public Page<MemberDto> getMemberPage(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Member> memberPage = memberJpaRepository.findAll(pageable);
+        return memberPage.map(entity -> new MemberDto(entity.getId(), entity.getName(), entity.getEmail()));
     }
 }
